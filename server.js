@@ -6,6 +6,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const httpErrors = require('http-errors')
 const debug = require('debug')('authdemo:server')
+const cors = require('cors')
 
 // app modules
 const handleError = require('./lib/handle-error')
@@ -22,6 +23,7 @@ mongoose.connect(mongoURI)
 
 // setup middleware
 app.use(morgan('dev'))
+app.use(cors())
 
 // setup rotues
 app.use('/api', authRouter)
