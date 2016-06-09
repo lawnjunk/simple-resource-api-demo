@@ -86,6 +86,7 @@ describe('testing module snack-router', function(){
 
   describe('testing GET /api/snack/all', () => {
     before((done) => {
+      before('before GET /api/snack/all')
       authController.signup({username: 'testuser', password: 'testpassword'})
       .then( token => {
         this.token = token
@@ -117,12 +118,12 @@ describe('testing module snack-router', function(){
     })
 
     it('should return an array of two snacks', (done) => {
+      debug('test GET /api/snack/all')
       request.get(`${baseURL}/snack/all`)
       .set({ Authorization: `Bearer ${this.token}` })
       .then(res => {
         expect(res.status).to.equal(200)
         expect(res.body.length).to.equal(2)
-        console.log(res.body)
         done()
       })
       .catch(done)

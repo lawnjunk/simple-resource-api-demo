@@ -25,10 +25,6 @@ mongoose.connect(mongoURI)
 // setup middleware
 app.use(morgan('dev'))
 app.use(cors())
-//app.all('*', function(req, res, next){
-  //console.log(req.headers)
-  //next()
-//})
 
 // setup rotues
 app.use('/api', authRouter)
