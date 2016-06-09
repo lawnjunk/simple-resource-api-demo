@@ -1,1 +1,4 @@
+script
 node_modules
+**/*.swp
+.DS_Store

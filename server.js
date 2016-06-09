@@ -30,10 +30,6 @@ app.use(cors())
 app.use('/api', authRouter)
 app.use('/api', snackRouter)
 
-app.get('/api/wat', parseBearerAuth, function(req, res, next){
-  res.send(req.userId)
-})
-
 app.all('*', (req, res, next) => {
   debug(`404 * route`)
   const err = httpErrors(404, 'not a valid rotue')
