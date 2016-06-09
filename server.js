@@ -14,7 +14,7 @@ const parseBearerAuth = require('./lib/parse-bearer-auth')
 
 // constants
 const port = process.env.PORT || 3000
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost/dev'
+const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/dev'
 const app = express()
 
 // setup mongo
