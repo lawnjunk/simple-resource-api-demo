@@ -11,6 +11,7 @@ const cors = require('cors')
 // app modules
 const handleError = require('./lib/handle-error')
 const authRouter = require('./route/auth-router')
+const snackRouter = require('./route/snack-router')
 const parseBearerAuth = require('./lib/parse-bearer-auth')
 
 // constants
@@ -24,9 +25,14 @@ mongoose.connect(mongoURI)
 // setup middleware
 app.use(morgan('dev'))
 app.use(cors())
+//app.all('*', function(req, res, next){
+  //console.log(req.headers)
+  //next()
+//})
 
 // setup rotues
 app.use('/api', authRouter)
+app.use('/api', snackRouter)
 
 app.get('/api/wat', parseBearerAuth, function(req, res, next){
   res.send(req.userId)

@@ -10,6 +10,7 @@ const superPromse = require('superagent-promise-plugin')
 const debug = require('debug')('authdemo:auth-router-test')
 
 const authController = require('../controller/auth-controller')
+const userController = require('../controller/user-controller')
 const port = process.env.PORT || 3000
 const baseURL = `localhost:${port}/api`
 const server = require('../server')
@@ -17,6 +18,7 @@ request.use(superPromse)
 
 describe('testing module auth-router', function(){
   before((done) => {
+    debug('before module auth-roter')
     if (! server.isRunning) {
       server.listen(port, () => {
         server.isRunning = true
@@ -29,6 +31,7 @@ describe('testing module auth-router', function(){
   })
 
   after((done) => {
+    debug('after module auth-roter')
     if (server.isRunning) {
       server.close(() => {
         server.isRunning = false 
@@ -42,12 +45,14 @@ describe('testing module auth-router', function(){
 
   describe('testing POST /api/signup', function(){
     after((done) => {
-      authController.removeAllUsers()
+      debug('after POST /api/signup')
+      userController.removeAllUsers()
       .then(() => done())
       .catch(done)
     })
 
     it('should return a token', function(done){
+      debug('test POST /api/signup')
       request.post(`${baseURL}/signup`)
       .send({
         username: 'slug', 
@@ -64,18 +69,21 @@ describe('testing module auth-router', function(){
 
   describe('testing GET /api/signin', function(){
     before((done) => {
+      debug('before GET /api/signup')
       authController.signup({username: 'slug', password: '1234'}) 
       .then(() => done())
       .catch(done)
     })
 
     after((done) => {
-      authController.removeAllUsers()
+      debug('after GET /api/signup')
+      userController.removeAllUsers()
       .then(() => done())
       .catch(done)
     })
 
     it('should return a token', function(done){
+      debug('test GET /api/signup')
       request.get(`${baseURL}/signin`)
       .auth('slug', '1234')
       .then( res => {

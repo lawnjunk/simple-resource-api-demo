@@ -31,6 +31,3 @@ exports.signin = function(auth){
   })
 }
 
-exports.removeAllUsers = function(){
-  return User.remove({})
-}

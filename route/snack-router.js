@@ -14,10 +14,15 @@ const snackRouter = module.exports = new Router()
 
 snackRouter.post('/snack', parseBearerAuth, jsonParser, function(req, res, next){
   req.body.userId = req.userId
-  req.created = new Date()
+  req.body.created = new Date()
   snackController.createSnack(req.body)
   .then(snack => res.json(snack))
   .catch(next)
 })
 
-
+snackRouter.get('/snack/all', parseBearerAuth, function(req, res, next){
+  const data = {userId: req.userId}
+  snackController.fetchUserSnacks(data)
+  .then( snacks => res.json(snacks))
+  .catch(next)
+})

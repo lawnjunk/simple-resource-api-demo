@@ -14,3 +14,13 @@ exports.createSnack = function(data){
     .catch(err => reject(createError(400, err.message)))
   })
 }
+
+exports.fetchUserSnacks = function(data){
+  debug('fetchUserSnacks')
+  return Snack.find({userId: data.userId})  
+}
+
+exports.removeAllSnacks = function(){
+  debug('removeAllSnacks')
+  return Snack.remove({})
+}
