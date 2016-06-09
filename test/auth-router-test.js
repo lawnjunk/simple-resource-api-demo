@@ -1,26 +1,58 @@
 'use strict'
 
-process.env.APP_SECRET = 'slugs are secret'
+// set env vars
+process.env.APP_SECRET = process.env.APP_SECRET || 'slugs are secret'
+process.env.MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/test'
 
 const expect = require('chai').expect
 const request = require('superagent-use')
 const superPromse = require('superagent-promise-plugin')
-request.use(superPromse)
+const debug = require('debug')('authdemo:auth-router-test')
 
 const authController = require('../controller/auth-controller')
+const userController = require('../controller/user-controller')
 const port = process.env.PORT || 3000
 const baseURL = `localhost:${port}/api`
-require('../server')
+const server = require('../server')
+request.use(superPromse)
 
 describe('testing module auth-router', function(){
+  before((done) => {
+    debug('before module auth-roter')
+    if (! server.isRunning) {
+      server.listen(port, () => {
+        server.isRunning = true
+        debug(`server up ::: ${port}`)
+        done()
+      })
+      return
+    }
+    done()
+  })
+
+  after((done) => {
+    debug('after module auth-roter')
+    if (server.isRunning) {
+      server.close(() => {
+        server.isRunning = false 
+        debug('server down')
+        done()
+      })
+      return
+    }
+    done()
+  })
+
   describe('testing POST /api/signup', function(){
     after((done) => {
-      authController.removeAllUsers()
+      debug('after POST /api/signup')
+      userController.removeAllUsers()
       .then(() => done())
       .catch(done)
     })
 
     it('should return a token', function(done){
+      debug('test POST /api/signup')
       request.post(`${baseURL}/signup`)
       .send({
         username: 'slug', 
@@ -28,7 +60,7 @@ describe('testing module auth-router', function(){
       })
       .then(res => {
         expect(res.status).to.equal(200)
-        console.log(res.text)
+        expect(res.text.length).to.equal(203)
         done()
       })
       .catch(done)
@@ -37,30 +69,27 @@ describe('testing module auth-router', function(){
 
   describe('testing GET /api/signin', function(){
     before((done) => {
+      debug('before GET /api/signup')
       authController.signup({username: 'slug', password: '1234'}) 
       .then(() => done())
       .catch(done)
     })
 
     after((done) => {
-      authController.removeAllUsers()
+      debug('after GET /api/signup')
+      userController.removeAllUsers()
       .then(() => done())
       .catch(done)
     })
 
     it('should return a token', function(done){
+      debug('test GET /api/signup')
       request.get(`${baseURL}/signin`)
       .auth('slug', '1234')
       .then( res => {
         expect(res.status).to.equal(200)
-        console.log(res.text);
-
-        request.get(`${baseURL}/wat`)
-        .set('authorization', `Bearer ${res.text}`)
-        .then((res) => {
-          console.log('userid res.text', res.text)
-          done()
-        });
+        expect(res.text.length).to.equal(203)
+        done()
       })
       .catch(done)
 
