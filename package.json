@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha"
+    "test": "./node_modules/mocha/bin/mocha"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +24,12 @@
     "jsonwebtoken": "^7.0.0",
     "mongoose": "^4.4.20",
     "morgan": "^1.7.0",
+    "superagent-promise-plugin": "^3.2.0",
+    "superagent-use": "0.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
     "superagent-promise-plugin": "^3.2.0",
     "superagent-use": "0.0.1"
   }
