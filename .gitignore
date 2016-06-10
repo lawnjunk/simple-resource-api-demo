@@ -1,4 +1,4 @@
-script
+env.sh
 node_modules
 **/*.swp
 .DS_Store
