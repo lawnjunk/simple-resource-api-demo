@@ -10,9 +10,9 @@ const cors = require('cors')
 
 // app modules
 const handleError = require('./lib/handle-error')
+const parseBearerAuth = require('./lib/parse-bearer-auth')
 const authRouter = require('./route/auth-router')
 const snackRouter = require('./route/snack-router')
-const parseBearerAuth = require('./lib/parse-bearer-auth')
 
 // constants
 const port = process.env.PORT || 3000

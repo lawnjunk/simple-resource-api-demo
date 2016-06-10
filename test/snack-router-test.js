@@ -12,37 +12,14 @@ const debug = require('debug')('authdemo:snack-router-test')
 const authController = require('../controller/auth-controller')
 const userController = require('../controller/user-controller')
 const snackController = require('../controller/snack-controller')
-const port = process.env.PORT || 3000
+const serverTestController = require('./lib/server-test-controller.js');
+const port = process.env.PORT || 3000;
 const baseURL = `localhost:${port}/api`
-const server = require('../server')
 request.use(superPromse)
 
 describe('testing module snack-router', function(){
-  before((done) => {
-    debug('before all module snack-roter')
-    if (! server.isRunning) {
-      server.listen(port, () => {
-        server.isRunning = true
-        debug(`server up ::: ${port}`)
-        done()
-      })
-      return
-    }
-    done()
-  })
-
-  after((done) => {
-    debug('after all module snack-roter')
-    if (server.isRunning) {
-      server.close(() => {
-        server.isRunning = false
-        debug('server down')
-        done()
-      })
-      return
-    }
-    done()
-  })
+  before(serverTestController.startServer)
+  after(serverTestController.stopServer)
 
   beforeEach((done) => {
     debug('beforeEach module snack-router')
@@ -90,6 +67,7 @@ describe('testing module snack-router', function(){
       authController.signup({username: 'testuser', password: 'testpassword'})
       .then( token => {
         this.token = token
+
         const snackOneRequest = request.post(`${baseURL}/snack`)
         .send({
           name: 'yum bowl'
